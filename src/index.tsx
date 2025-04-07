@@ -24,8 +24,11 @@ const App = () => {
 			'--bg-color': styleOptions.backgroundColor.value,
 		} as CSSProperties
 	}
-	const onStateChanged = (state: ArticleStateType) => {
+	const changeStyle = (state: ArticleStateType) => {
 		setStyleState(state)
+	}
+	const onArticleClicked = () => {
+
 	}
 	const [styleState, setStyleState] = useState(defaultArticleState)
 	return (
@@ -34,8 +37,8 @@ const App = () => {
 			style={
 				getStyleCss(styleState)
 			}>
-			<ArticleParamsForm changeStyleState={onStateChanged} defaultState={defaultArticleState}/>
-			<Article />
+			<ArticleParamsForm changeStyleState={changeStyle} defaultState={defaultArticleState}/>
+			<Article onClick={onArticleClicked}/>
 		</div>
 	);
 };

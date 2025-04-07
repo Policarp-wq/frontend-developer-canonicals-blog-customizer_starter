@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 import { ArticleStateType, backgroundColors, contentWidthArr, fontColors, fontFamilyOptions, fontSizeOptions, OptionType } from 'src/constants/articleProps';
 import { Select } from '../select';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 
@@ -18,12 +18,11 @@ export type TConfigurationState = ArticleStateType & {
 	opened: boolean
 }
 
-export const ArticleParamsForm = ({changeStyleState: changeStyleState, defaultState: defaultState}: TArticleProps) => {
+export const ArticleParamsForm = ({changeStyleState, defaultState}: TArticleProps) => {
 	const [state, setState] = useState({...defaultState, opened: false});
 	const onSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		changeStyleState(state);
-		console.log("submity")
 	}
 	const reset = () => {
 		let prev = {...defaultState, opened: true};
@@ -36,10 +35,27 @@ export const ArticleParamsForm = ({changeStyleState: changeStyleState, defaultSt
 		changedState[prop] = opt;
 		setState(changedState);
 	}
+	const toggleOpen = () => {
+		setState(prev => ({ ...prev, opened: !prev.opened }));
+	}
+	const formRef = useRef<HTMLDivElement>(null);
+	const handleClick = (e: MouseEvent) => {
+		if(state.opened && formRef.current && !formRef.current.contains(e.target as Node)){
+			toggleOpen();
+		}
+	}
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClick);
+		return () => {
+			document.removeEventListener('mousedown', handleClick);
+		}
+	}, [state.opened])
+
 	return (
 		<>
-			<ArrowButton opened={state.opened} onClick={() => setState(prev => ({ ...prev, opened: !prev.opened }))}/>
+			<ArrowButton opened={state.opened} onClick={toggleOpen}/>
 			<aside
+			ref={formRef}
 				//className={`${styles.container} ${state.opened ? styles.container_open : ""}`}
 				className={clsx(styles.container, {[styles.container_open]: state.opened})}>
 				<form className={styles.form} onSubmit={onSubmit}>
