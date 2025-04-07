@@ -34,7 +34,7 @@ const App = () => {
 			style={
 				getStyleCss(styleState)
 			}>
-			<ArticleParamsForm setter={onStateChanged} currentState={styleState}/>
+			<ArticleParamsForm changeStyleState={onStateChanged} defaultState={defaultArticleState}/>
 			<Article />
 		</div>
 	);
