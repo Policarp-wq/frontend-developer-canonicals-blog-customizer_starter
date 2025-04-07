@@ -1,3 +1,4 @@
+
 import { createRoot } from 'react-dom/client';
 import { StrictMode, CSSProperties, useState } from 'react';
 import clsx from 'clsx';
@@ -24,8 +25,11 @@ const App = () => {
 			'--bg-color': styleOptions.backgroundColor.value,
 		} as CSSProperties
 	}
-	const onStateChanged = (state: ArticleStateType) => {
+	const changeStyle = (state: ArticleStateType) => {
 		setStyleState(state)
+	}
+	const onArticleClicked = () => {
+
 	}
 	const [styleState, setStyleState] = useState(defaultArticleState)
 	return (
@@ -34,8 +38,8 @@ const App = () => {
 			style={
 				getStyleCss(styleState)
 			}>
-			<ArticleParamsForm setter={onStateChanged} currentState={styleState}/>
-			<Article />
+			<ArticleParamsForm changeStyleState={changeStyle} defaultState={defaultArticleState}/>
+			<Article onClick={onArticleClicked}/>
 		</div>
 	);
 };
@@ -45,3 +49,4 @@ root.render(
 		<App />
 	</StrictMode>
 );
+
